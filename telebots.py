@@ -4,7 +4,8 @@ from telebot import types
 import requests
 import json
 import time
-bot=telebot.TeleBot('8171715913:AAHFpEZvfL8QleS2L6sVjaKw1ay6bJKIobo')
+import info
+bot=telebot.TeleBot(info.t)
        
 
 @bot.message_handler(commands=['start'])
@@ -23,13 +24,7 @@ def main(message):
 
 @bot.message_handler(content_types=['video'])
 def handle_video(message):
-    TOKEN = "8171715913:AAHFpEZvfL8QleS2L6sVjaKw1ay6bJKIobo"
-
-    SPEECHFLOW_API_URL = "https://api.speechflow.io/asr/file/v1/create"
-
-    API_KEY_ID = "KKQXbZJzVgsU8lar"
-    API_KEY_SECRET = "aH79RWxtjOlFltNh"
-
+    
     
     video = message.video
     file_id = video.file_id
@@ -47,12 +42,12 @@ def handle_video(message):
         # Отправляем файл на SpeechFlow
         try:
             
-            SPEECHFLOW_API_URL = "https://api.speechflow.io/asr/file/v1/create?lang=ru"  # Язык можно изменить
+            SPEECHFLOW_API_URL = "https://api.speechflow.io/asr/file/v1/create?lang=ru"  
 
             
             headers = {
-                "keyId": API_KEY_ID,
-                "keySecret": API_KEY_SECRET,
+                "keyId": info.API_KEY_ID,
+                "keySecret": info.API_KEY_SECRET,
             }
 
             files = {'file': ('video.mp4', video_data)}
@@ -112,7 +107,7 @@ def handle_video(message):
 
 def get_transcription_result(task_id, headers):
     """Получает результат транскрибации по task_id."""
-    transcription_url = f"https://api.speechflow.io/asr/file/v1/query?taskId={task_id}"  
+    transcription_url = f"https://api.speechflow.io/asr/file/v1/query?taskId={task_id}"   
     try:
         response = requests.get(transcription_url, headers=headers)
         response.raise_for_status()
